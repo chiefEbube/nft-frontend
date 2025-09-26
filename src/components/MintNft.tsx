@@ -168,61 +168,103 @@ export default function MintNft() {
     );
   }
 
-  if (!isOwner) {
-    return (
-      <div style={cardStyle}>
-        <h2 style={{ fontSize: '1.25rem', fontWeight: 'bold', marginBottom: '0.5rem' }}>Mint NFT</h2>
-        <p style={{ color: '#6b7280' }}>Only the contract owner can mint NFTs</p>
-      </div>
-    );
-  }
-
   return (
-    <div style={cardStyle}>
-      <h2 style={{ fontSize: '1.25rem', fontWeight: 'bold', marginBottom: '0.5rem' }}>Mint New NFT</h2>
-      <p style={{ color: '#6b7280', marginBottom: '1.5rem' }}>Create a new NFT as the contract owner</p>
-      
-      <form onSubmit={handleSubmit}>
-        <div style={{ marginBottom: '1rem' }}>
-          <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>NFT Name</label>
-          <input
-            type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleInputChange}
-            placeholder="Enter NFT name"
-            required
-            style={inputStyle}
-          />
+    <div>
+      {/* Contract Owner Display */}
+      <div style={cardStyle}>
+        <h2 style={{ fontSize: '1.25rem', fontWeight: 'bold', marginBottom: '0.5rem' }}>Contract Information</h2>
+        <div style={{ marginBottom: '0.5rem' }}>
+          <strong>Contract Owner:</strong> 
+          <span style={{ 
+            fontFamily: 'monospace', 
+            backgroundColor: '#f3f4f6', 
+            padding: '0.25rem 0.5rem', 
+            borderRadius: '0.25rem',
+            marginLeft: '0.5rem',
+            fontSize: '0.875rem'
+          }}>
+            {contractOwner ? `${contractOwner.slice(0, 6)}...${contractOwner.slice(-4)}` : 'Loading...'}
+          </span>
         </div>
-
-        <div style={{ marginBottom: '1rem' }}>
-          <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>Description</label>
-          <textarea
-            name="description"
-            value={formData.description}
-            onChange={handleInputChange}
-            placeholder="Enter NFT description"
-            required
-            style={{ ...inputStyle, height: '100px', resize: 'vertical' }}
-          />
+        <div style={{ marginBottom: '0.5rem' }}>
+          <strong>Your Address:</strong> 
+          <span style={{ 
+            fontFamily: 'monospace', 
+            backgroundColor: '#f3f4f6', 
+            padding: '0.25rem 0.5rem', 
+            borderRadius: '0.25rem',
+            marginLeft: '0.5rem',
+            fontSize: '0.875rem'
+          }}>
+            {address.slice(0, 6)}...{address.slice(-4)}
+          </span>
         </div>
-
-        <div style={{ marginBottom: '1rem' }}>
-          <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>Image</label>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleImageChange}
-            required
-            style={inputStyle}
-          />
+        <div style={{ 
+          padding: '0.75rem', 
+          borderRadius: '0.375rem', 
+          backgroundColor: isOwner ? '#dcfce7' : '#fef2f2',
+          border: `1px solid ${isOwner ? '#16a34a' : '#dc2626'}`
+        }}>
+          <strong style={{ color: isOwner ? '#16a34a' : '#dc2626' }}>
+            {isOwner ? '✅ You are the contract owner' : '❌ You are not the contract owner'}
+          </strong>
         </div>
+      </div>
 
-        <button type="submit" disabled={isMinting} style={buttonStyle}>
-          {isMinting ? "Minting..." : "Mint NFT"}
-        </button>
-      </form>
+      {/* Mint Form */}
+      {isOwner ? (
+        <div style={cardStyle}>
+          <h2 style={{ fontSize: '1.25rem', fontWeight: 'bold', marginBottom: '0.5rem' }}>Mint New NFT</h2>
+          <p style={{ color: '#6b7280', marginBottom: '1.5rem' }}>Create a new NFT as the contract owner</p>
+          
+          <form onSubmit={handleSubmit}>
+            <div style={{ marginBottom: '1rem' }}>
+              <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>NFT Name</label>
+              <input
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleInputChange}
+                placeholder="Enter NFT name"
+                required
+                style={inputStyle}
+              />
+            </div>
+
+            <div style={{ marginBottom: '1rem' }}>
+              <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>Description</label>
+              <textarea
+                name="description"
+                value={formData.description}
+                onChange={handleInputChange}
+                placeholder="Enter NFT description"
+                required
+                style={{ ...inputStyle, height: '100px', resize: 'vertical' }}
+              />
+            </div>
+
+            <div style={{ marginBottom: '1rem' }}>
+              <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>Image</label>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+                required
+                style={inputStyle}
+              />
+            </div>
+
+            <button type="submit" disabled={isMinting} style={buttonStyle}>
+              {isMinting ? "Minting..." : "Mint NFT"}
+            </button>
+          </form>
+        </div>
+      ) : (
+        <div style={cardStyle}>
+          <h2 style={{ fontSize: '1.25rem', fontWeight: 'bold', marginBottom: '0.5rem' }}>Mint NFT</h2>
+          <p style={{ color: '#6b7280' }}>Only the contract owner can mint NFTs</p>
+        </div>
+      )}
     </div>
   );
 }
