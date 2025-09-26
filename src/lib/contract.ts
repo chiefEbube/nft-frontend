@@ -1,4 +1,5 @@
 export const CONTRACT_ADDRESS = "0x06E52345FfE480E8D6275E52a65eec952Ee38Ee8" as const;
+export const INITIAL_OWNER = "0xBBE99bf967e790eb15e3b13B1a499E8965F30734" as const;
 
 export const CONTRACT_ABI = [
   {

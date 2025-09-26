@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { useAccount, useReadContract, useWriteContract } from "wagmi";
+import { useAccount, useWriteContract } from "wagmi";
 import { toast } from "sonner";
 import axios from "axios";
-import { CONTRACT_ADDRESS, CONTRACT_ABI } from "@/lib/contract";
+import { CONTRACT_ADDRESS, CONTRACT_ABI, INITIAL_OWNER } from "@/lib/contract";
 
 export default function MintNft() {
   const { address } = useAccount();
@@ -17,15 +17,10 @@ export default function MintNft() {
   });
 
   // Check if connected user is the contract owner
-  const { data: contractOwner, error: ownerError, isLoading: ownerLoading } = useReadContract({
-    address: CONTRACT_ADDRESS,
-    abi: CONTRACT_ABI,
-    functionName: "owner",
-  });
+  const contractOwner = INITIAL_OWNER;
+  const isOwner = address && address.toLowerCase() === contractOwner.toLowerCase();
 
-  console.log("Contract owner data:", { contractOwner, ownerError, ownerLoading });
-
-  const isOwner = address && contractOwner && address.toLowerCase() === contractOwner.toLowerCase();
+  console.log("Contract owner data:", { contractOwner, isOwner, userAddress: address });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -185,25 +180,9 @@ export default function MintNft() {
             marginLeft: '0.5rem',
             fontSize: '0.875rem'
           }}>
-            {ownerLoading ? 'Loading...' : 
-             ownerError ? 'Error loading' : 
-             contractOwner ? `${contractOwner.slice(0, 6)}...${contractOwner.slice(-4)}` : 
-             'No data'}
+            {contractOwner.slice(0, 6)}...{contractOwner.slice(-4)}
           </span>
         </div>
-        {ownerError && (
-          <div style={{ 
-            marginBottom: '0.5rem', 
-            padding: '0.5rem', 
-            backgroundColor: '#fef2f2', 
-            border: '1px solid #dc2626', 
-            borderRadius: '0.25rem',
-            fontSize: '0.875rem',
-            color: '#dc2626'
-          }}>
-            Error: {ownerError.message}
-          </div>
-        )}
         <div style={{ marginBottom: '0.5rem' }}>
           <strong>Your Address:</strong> 
           <span style={{ 
