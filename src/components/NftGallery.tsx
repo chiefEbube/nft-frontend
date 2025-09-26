@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useAccount, useReadContract, useReadContracts, useWriteContract } from "wagmi";
+import { type Abi } from "viem";
 import { toast } from "sonner";
 import axios from "axios";
 import Image from "next/image";
@@ -39,7 +40,7 @@ export default function NftGallery() {
   // Fetch token IDs for the user
   const tokenIdContracts: Array<{
     address: `0x${string}`;
-    abi: readonly any[];
+    abi: Abi;
     functionName: string;
     args: readonly unknown[];
   }> = [];
@@ -61,7 +62,7 @@ export default function NftGallery() {
   // Fetch token URIs for all owned tokens
   const tokenURIContracts: Array<{
     address: `0x${string}`;
-    abi: readonly any[];
+    abi: Abi;
     functionName: string;
     args: readonly unknown[];
   }> = [];

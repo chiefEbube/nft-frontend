@@ -59,7 +59,7 @@ export default function MintNft() {
     name: string;
     description: string;
     image: string;
-    attributes: any[];
+    attributes: unknown[];
   }): Promise<string> => {
     const response = await axios.post(
       "https://api.pinata.cloud/pinning/pinJSONToIPFS",
