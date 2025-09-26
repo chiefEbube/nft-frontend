@@ -11,7 +11,7 @@ import { base } from "wagmi/chains";
 
 const config = getDefaultConfig({
   appName: "My Cute NFT dApp",
-  projectId: "YOUR_WALLETCONNECT_PROJECT_ID",
+  projectId: process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID!,
   chains: [base],
   ssr: true,
 });
@@ -21,11 +21,15 @@ const queryClient = new QueryClient();
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className="bg-gradient-to-br from-pink-50 via-white to-purple-50 min-h-screen flex items-center justify-center font-sans">
+      <body style={{ 
+        background: 'linear-gradient(to bottom right, #fdf2f8, #ffffff, #faf5ff)', 
+        minHeight: '100vh', 
+        fontFamily: 'system-ui, -apple-system, sans-serif' 
+      }}>
         <WagmiProvider config={config}>
           <QueryClientProvider client={queryClient}>
             <RainbowKitProvider>
-              <div className="w-full max-w-2xl bg-white shadow-xl rounded-2xl p-6">
+              <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 1rem' }}>
                 {children}
               </div>
             </RainbowKitProvider>
