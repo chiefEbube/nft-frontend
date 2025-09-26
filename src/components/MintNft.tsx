@@ -55,7 +55,12 @@ export default function MintNft() {
     return `ipfs://${response.data.IpfsHash}`;
   };
 
-  const uploadMetadataToIPFS = async (metadata: any): Promise<string> => {
+  const uploadMetadataToIPFS = async (metadata: {
+    name: string;
+    description: string;
+    image: string;
+    attributes: any[];
+  }): Promise<string> => {
     const response = await axios.post(
       "https://api.pinata.cloud/pinning/pinJSONToIPFS",
       metadata,

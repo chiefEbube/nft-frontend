@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useAccount, useReadContract, useReadContracts, useWriteContract } from "wagmi";
 import { toast } from "sonner";
 import axios from "axios";
+import Image from "next/image";
 import { CONTRACT_ADDRESS, CONTRACT_ABI } from "@/lib/contract";
 
 interface NFTMetadata {
@@ -36,7 +37,12 @@ export default function NftGallery() {
   });
 
   // Fetch token IDs for the user
-  const tokenIdContracts: any[] = [];
+  const tokenIdContracts: Array<{
+    address: `0x${string}`;
+    abi: readonly any[];
+    functionName: string;
+    args: readonly unknown[];
+  }> = [];
   if (balance && balance > 0n) {
     for (let i = 0; i < Number(balance); i++) {
       tokenIdContracts.push({
@@ -53,7 +59,12 @@ export default function NftGallery() {
   });
 
   // Fetch token URIs for all owned tokens
-  const tokenURIContracts: any[] = [];
+  const tokenURIContracts: Array<{
+    address: `0x${string}`;
+    abi: readonly any[];
+    functionName: string;
+    args: readonly unknown[];
+  }> = [];
   if (tokenIds) {
     tokenIds.forEach((result) => {
       if (result.status === "success" && result.result) {
@@ -199,7 +210,7 @@ export default function NftGallery() {
     return (
       <div style={cardStyle}>
         <h2 style={{ fontSize: '1.25rem', fontWeight: 'bold', marginBottom: '0.5rem' }}>Your NFTs</h2>
-        <p style={{ color: '#6b7280' }}>You don't own any NFTs yet</p>
+        <p style={{ color: '#6b7280' }}>You don&apos;t own any NFTs yet</p>
       </div>
     );
   }
@@ -214,11 +225,12 @@ export default function NftGallery() {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1.5rem' }}>
         {nfts.map((nft) => (
           <div key={nft.tokenId.toString()} style={cardStyle}>
-            <div style={{ aspectRatio: '1', overflow: 'hidden', marginBottom: '1rem' }}>
-              <img
+            <div style={{ aspectRatio: '1', overflow: 'hidden', marginBottom: '1rem', position: 'relative' }}>
+              <Image
                 src={nft.metadata.image.replace("ipfs://", "https://gateway.pinata.cloud/ipfs/")}
                 alt={nft.metadata.name}
-                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                fill
+                style={{ objectFit: 'cover' }}
               />
             </div>
             <h3 style={{ fontSize: '1.125rem', fontWeight: 'bold', marginBottom: '0.5rem' }}>{nft.metadata.name}</h3>
