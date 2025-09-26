@@ -17,11 +17,13 @@ export default function MintNft() {
   });
 
   // Check if connected user is the contract owner
-  const { data: contractOwner } = useReadContract({
+  const { data: contractOwner, error: ownerError, isLoading: ownerLoading } = useReadContract({
     address: CONTRACT_ADDRESS,
     abi: CONTRACT_ABI,
     functionName: "owner",
   });
+
+  console.log("Contract owner data:", { contractOwner, ownerError, ownerLoading });
 
   const isOwner = address && contractOwner && address.toLowerCase() === contractOwner.toLowerCase();
 
@@ -183,9 +185,25 @@ export default function MintNft() {
             marginLeft: '0.5rem',
             fontSize: '0.875rem'
           }}>
-            {contractOwner ? `${contractOwner.slice(0, 6)}...${contractOwner.slice(-4)}` : 'Loading...'}
+            {ownerLoading ? 'Loading...' : 
+             ownerError ? 'Error loading' : 
+             contractOwner ? `${contractOwner.slice(0, 6)}...${contractOwner.slice(-4)}` : 
+             'No data'}
           </span>
         </div>
+        {ownerError && (
+          <div style={{ 
+            marginBottom: '0.5rem', 
+            padding: '0.5rem', 
+            backgroundColor: '#fef2f2', 
+            border: '1px solid #dc2626', 
+            borderRadius: '0.25rem',
+            fontSize: '0.875rem',
+            color: '#dc2626'
+          }}>
+            Error: {ownerError.message}
+          </div>
+        )}
         <div style={{ marginBottom: '0.5rem' }}>
           <strong>Your Address:</strong> 
           <span style={{ 
